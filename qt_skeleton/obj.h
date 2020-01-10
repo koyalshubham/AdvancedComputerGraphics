@@ -1,21 +1,25 @@
-#ifndef OBJ_H
-#define OBJ_H
+#ifndef OBJFILE_H
+#define OBJFILE_H
 
-bool loadOBJ(
-    const char * path,
-    std::vector<glm::vec3> & out_vertices,
-    std::vector<glm::vec2> & out_uvs,
-    std::vector<glm::vec3> & out_normals
-);
+#include <QString>
+#include <QVector>
+#include <QVector2D>
+#include <QVector3D>
 
+class OBJFile {
 
+public:
+    OBJFile(QString fileName);
+    ~OBJFile();
 
-bool loadAssImp(
-    const char * path,
-    std::vector<unsigned short> & indices,
-    std::vector<glm::vec3> & vertices,
-    std::vector<glm::vec2> & uvs,
-    std::vector<glm::vec3> & normals
-);
+    QVector<QVector3D> vertexCoords;
+    QVector<QVector2D> textureCoords;
+    QVector<QVector3D> vertexNormals;
+    QVector<unsigned short> faceValences;
+    QVector<unsigned int> faceCoordInd;
+    QVector<unsigned int> faceTexInd;
+    QVector<unsigned int> faceNormalInd;
 
-#endif
+};
+
+#endif // OBJFILE_H

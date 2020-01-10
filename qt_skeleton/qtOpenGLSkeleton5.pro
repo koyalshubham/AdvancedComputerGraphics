@@ -21,13 +21,19 @@ TEMPLATE = app
 SOURCES += main.cpp \
         mainwindow.cpp\
     mainview.cpp \
-    obj.cpp
+    obj.cpp \
+    mesh.cpp \
+    meshtools.cpp
 
 HEADERS += \
     mainview.h \
     mainwindow.h \
     vertex.h \
-    obj.h
+    obj.h \
+    mesh.h \
+    meshtools.h \
+    face.h \
+    halfedge.h
 
 # Default rules for deployment.
 #qnx: target.path = /tmp/$${TARGET}/bin
@@ -35,10 +41,12 @@ HEADERS += \
 #!isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    shaders/skeleton.tcs \
-    shaders/skeleton.tes \
     skeleton.frag \
-    skeleton.vert
+    skeleton.vert \
+    shaders/fragment.glsl \
+    shaders/control.glsl \
+    shaders/evaluation.glsl \
+    shaders/vertex.glsl
 
 RESOURCES += \
     resources.qrc

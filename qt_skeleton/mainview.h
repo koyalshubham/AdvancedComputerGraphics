@@ -2,43 +2,77 @@
 #define MAINVIEW_H
 
 #include <QOpenGLWidget>
-#include <QOpenGLFunctions>
-#include <QOpenGLBuffer>
-#include <QOpenGLVertexArrayObject>
-#include <QOpenGLShaderProgram>
 #include <QOpenGLFunctions_4_1_Core>
+#include <QOpenGLDebugLogger>
 
-#include <QGLFormat>
+#include <QOpenGLShaderProgram>
+
+#include <QMouseEvent>
+#include "mesh.h"
 
 class MainView : public QOpenGLWidget, protected QOpenGLFunctions_4_1_Core {
 
     Q_OBJECT
 
 public:
-    MainView(QWidget *parent = 0) ;
-        ~MainView();
+    MainView(QWidget *Parent = 0);
+    ~MainView();
 
+    bool modelLoaded;
+    bool wireframeMode;
+    bool reflectionLinesEnabled;
+    float reflectionLinesSize;
+    bool gaussianEnabled;
+
+    float FoV;
+    float dispRatio;
+    float rotAngle;
+
+    bool uniformUpdateRequired;
+
+    void setSubdivisionLevel(int level);
+    void updateMatrices();
+    void updateUniforms();
+    void updateMeshBuffers(Mesh& currentMesh);
+
+    GLuint CreateShaderProgram();
+    void printVersionInformation();
 protected:
     void initializeGL();
-    void resizeGL( int w, int h );
+    void resizeGL(int newWidth, int newHeight);
     void paintGL();
 
-    void keyPressEvent( QKeyEvent* e );
+    void renderMesh();
 
-    GLuint CreateShader(GLenum type, const char *src);
-    GLuint CreateShaderProgram(const std::vector<GLuint> &shaders);
+    void mousePressEvent(QMouseEvent* event);
+    void wheelEvent(QWheelEvent* event);
+    void keyPressEvent(QKeyEvent* event);
+
 private:
-    GLint colorLocation;
-    GLuint vao;
-    GLuint program;
+    QOpenGLDebugLogger* debugLogger;
 
-    // OpenGL State Information
-    QOpenGLBuffer m_buffer;
-    QOpenGLVertexArrayObject m_vao;
-    QOpenGLShaderProgram m_program;
+    QMatrix4x4 modelViewMatrix, projectionMatrix;
+    QMatrix3x3 normalMatrix;
 
-    // Private Helpers
-    void printVersionInformation();
+    // Uniforms
+    GLint uniModelViewMatrix, uniProjectionMatrix, uniNormalMatrix;
+
+    // ---
+
+    QOpenGLShaderProgram* mainShaderProg;
+
+    GLuint meshVAO, meshCoordsBO, meshNormalsBO, meshIndexBO;
+    unsigned int meshIBOSize;
+
+    // ---
+
+
+    void createShaderPrograms();
+    void createBuffers();
+
+private slots:
+    void onMessageLogged( QOpenGLDebugMessage Message );
+
 };
 
 #endif // MAINVIEW_H
