@@ -312,7 +312,7 @@ void MainView::initializeGL() {
 
     // ---
 
-    createShaderPrograms();
+    CreateShaderProgram();
     createBuffers();
 
     // ---
@@ -366,6 +366,23 @@ void MainView::paintGL() {
     }
 }
 
+void MainView::renderMesh() {
+
+    glBindVertexArray(meshVAO);
+
+    if (wireframeMode) {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    }
+    else {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    }
+
+    glDrawElements(GL_TRIANGLES, meshIBOSize, GL_UNSIGNED_INT, 0);
+
+    glBindVertexArray(0);
+
+}
+
 void MainView::mousePressEvent(QMouseEvent* event) {
     setFocus();
 }
@@ -391,6 +408,11 @@ void MainView::keyPressEvent(QKeyEvent* event) {
         break;
     }
 }
+
+void MainView::onMessageLogged( QOpenGLDebugMessage Message ) {
+    qDebug() << " → Log:" << Message;
+}
+
 
 /*******************************************************************************
  * Private Helpers

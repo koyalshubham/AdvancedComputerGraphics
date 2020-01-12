@@ -1,5 +1,8 @@
 #include "meshtools.h"
 
+const uniform vec3 n0, n1, n2, p0, p1, p2;
+const uniform vec3 ne0, ne1, ne2, pe0, pe1, pe2;
+
 int Mesh::countFacelessHalfedges(QVector<HalfEdge> hes) {
     int cnt = 0;
     for (HalfEdge he : hes) {
@@ -300,4 +303,40 @@ void Mesh::splitHalfEdges(QVector<Vertex>& newVertices, QVector<HalfEdge>& newHa
     // Note that Next, Prev and Poly are not yet assigned at this point.
 
 }
+//QAS
+vec3 edgeCP(vec3 e, vec3 p0, vec3 p1){
+    return(e*4.0 - p0 - p1) *0.5;
+}
 
+vec3 Q(float u, float v, float w, vec3 p0, vec3 p1, vec3 p2, vec3 e0, vec3 e1, vec3 e2){
+    vec3 n200 = p0, n020 = p1, n002 =p2;
+    vec3 n110 = edgeCP(e0, p0, p1);
+    vec3 n101 = edgeCP(e2, p1, p2);
+    vec3 n011 = edgeCP(e1, p1, p2);
+    return w * (n200*w + n110*2*u) + u * (n020*u + n011*2*v) + v* (n002*v + n101*2*w);
+}
+
+vec3 P(float u, float v, float w){
+    return Q(u, v, w, p0, p1, p2, pe0, pe2, pe2);
+}
+
+vec3 N(float u , float v, float w){
+    return Q(u, v, w, n0, n1, n2, ne0, ne2, ne2);
+}
+
+void Mesh::QAS(Mesh &meshes){
+
+    unsigned short k;
+    int value = 1;
+    //One subdivide step
+    for (k = meshes.size(); k < value + 1; k++) {
+        meshes.append(Mesh());
+        //meshes.append(meshes[k-1].subdivideLoop());
+        meshes[k-1].subdivideLoop(meshes[k]);
+    }
+    QVector3D u = meshes.vertexCoords;
+    QVector3D v = meshes.vertexNormals;
+    QVector3D w = 1.0 - u - v;
+    meshes.vertices = P(u, v, w);
+    meshes.vertexNormals = normalize(N(u,v,w));
+}
