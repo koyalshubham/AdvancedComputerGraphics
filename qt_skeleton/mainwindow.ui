@@ -59,6 +59,19 @@
       </rect>
      </property>
     </widget>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>200</y>
+       <width>85</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>DO QAS</string>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

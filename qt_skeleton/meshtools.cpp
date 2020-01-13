@@ -1,7 +1,7 @@
 #include "meshtools.h"
 
-const uniform vec3 n0, n1, n2, p0, p1, p2;
-const uniform vec3 ne0, ne1, ne2, pe0, pe1, pe2;
+const uniform QVector3D n0, n1, n2, p0, p1, p2;
+const uniform QVector3D ne0, ne1, ne2, pe0, pe1, pe2;
 
 int Mesh::countFacelessHalfedges(QVector<HalfEdge> hes) {
     int cnt = 0;
@@ -304,23 +304,23 @@ void Mesh::splitHalfEdges(QVector<Vertex>& newVertices, QVector<HalfEdge>& newHa
 
 }
 //QAS
-vec3 edgeCP(vec3 e, vec3 p0, vec3 p1){
+QVector3D edgeCP(QVector3D e, QVector3D p0, QVector3D p1){
     return(e*4.0 - p0 - p1) *0.5;
 }
 
-vec3 Q(float u, float v, float w, vec3 p0, vec3 p1, vec3 p2, vec3 e0, vec3 e1, vec3 e2){
-    vec3 n200 = p0, n020 = p1, n002 =p2;
-    vec3 n110 = edgeCP(e0, p0, p1);
-    vec3 n101 = edgeCP(e2, p1, p2);
-    vec3 n011 = edgeCP(e1, p1, p2);
+QVector3D Q(float u, float v, float w, QVector3D p0, QVector3D p1, QVector3D p2, QVector3D e0, QVector3D e1, QVector3D e2){
+    QVector3D n200 = p0, n020 = p1, n002 =p2;
+    QVector3D n110 = edgeCP(e0, p0, p1);
+    QVector3D n101 = edgeCP(e2, p1, p2);
+    QVector3D n011 = edgeCP(e1, p1, p2);
     return w * (n200*w + n110*2*u) + u * (n020*u + n011*2*v) + v* (n002*v + n101*2*w);
 }
 
-vec3 P(float u, float v, float w){
+QVector3D P(float u, float v, float w){
     return Q(u, v, w, p0, p1, p2, pe0, pe2, pe2);
 }
 
-vec3 N(float u , float v, float w){
+QVector3D N(float u , float v, float w){
     return Q(u, v, w, n0, n1, n2, ne0, ne2, ne2);
 }
 
