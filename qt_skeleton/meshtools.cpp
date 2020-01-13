@@ -304,6 +304,7 @@ void Mesh::splitHalfEdges(QVector<Vertex>& newVertices, QVector<HalfEdge>& newHa
 
 }
 //QAS
+
 QVector3D edgeCP(QVector3D e, QVector3D p0, QVector3D p1){
     return(e*4.0 - p0 - p1) *0.5;
 }

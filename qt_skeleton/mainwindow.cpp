@@ -34,6 +34,6 @@ void MainWindow::on_RotateDial_valueChanged(int value) {
 
 void MainWindow::on_checkBox_stateChanged(int arg1)
 {
-    meshes.QAS(meshes);
+    mesh.QAS(meshes);
     ui->MainDisplay->updateMeshBuffers(meshes);
 }
