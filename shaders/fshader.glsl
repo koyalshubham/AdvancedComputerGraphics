@@ -1,7 +1,7 @@
 #version 410
 // Fragment shader
 
-layout (location = 0) in vec4 fs_pos;
+layout (location = 0) in vec3 fs_pos;
 layout (location = 1) in vec3 fs_norm;
 
 out vec4 fColor;

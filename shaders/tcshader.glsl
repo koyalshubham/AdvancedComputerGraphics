@@ -1,6 +1,6 @@
 #version 410
 
-layout (vertices = 3) out;
+layout (vertices = 6) out;
 
 layout (location = 0) in vec3 tc_pos[];
 layout (location = 1) in vec3 tc_norm[];

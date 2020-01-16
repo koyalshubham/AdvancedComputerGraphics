@@ -74,8 +74,6 @@ void MainView::updateMeshBuffers(Mesh& currentMesh) {
     QVector<QVector3D>& vertexNormals = currentMesh.getVertexNorms();
     QVector<unsigned int>& polyIndices = currentMesh.getPolyIndices();
 
-    qDebug() << vertexCoords.size();
-
     glBindBuffer(GL_ARRAY_BUFFER, meshCoordsBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(QVector3D)*vertexCoords.size(), vertexCoords.data(), GL_DYNAMIC_DRAW);
 
