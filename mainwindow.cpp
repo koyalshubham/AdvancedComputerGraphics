@@ -20,6 +20,9 @@ void MainWindow::loadOBJ() {
     meshes.squeeze();
     meshes.append( Mesh(&newModel) );
 
+    //zxt::- Do one single subdivision step
+    on_SubdivSteps_valueChanged(1);
+
     ui->MainDisplay->updateMeshBuffers( meshes[0] );
     ui->MainDisplay->modelLoaded = true;
 
@@ -47,4 +50,14 @@ void MainWindow::on_LoadOBJ_clicked() {
     loadOBJ();
     ui->LoadOBJ->setEnabled(true);
     ui->SubdivSteps->setEnabled(true);
+}
+
+void MainWindow::on_sBoxInnerTL_valueChanged(int value)
+{
+    ui->MainDisplay->setInnerTessLevel(float(value));
+}
+
+void MainWindow::on_sBoxOuterTL_valueChanged(int value)
+{
+    ui->MainDisplay->setOuterTessLevel(float(value));
 }

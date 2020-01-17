@@ -124,34 +124,34 @@ Mesh::~Mesh() {
 }
 
 void Mesh::extractAttributes() {
-    unsigned int k;
     unsigned short m;
     HalfEdge* currentEdge;
 
     vertexCoords.clear();
     vertexCoords.reserve(vertices.size());
 
-    for (k = 0; k < vertices.size(); k++) {
+    for (int k = 0; k < vertices.size(); k++) {
         vertexCoords.append(vertices[k].coords);
     }
 
     vertexNormals.clear();
     vertexNormals.reserve(vertices.size());
 
-    for (k = 0; k < faces.size(); k++) {
+    for (int k = 0; k < faces.size(); k++) {
         setFaceNormal(faces[k]);
     }
 
-    for (k = 0; k < vertices.size(); k++) {
+    for (int k = 0; k < vertices.size(); k++) {
         vertexNormals.append(computeVertexNormal(vertices[k]) );
     }
 
     polyIndices.clear();
     polyIndices.reserve(halfEdges.size() + faces.size());
 
-    for (k = 0; k < faces.size(); k++) {
+    for (int k = 0; k < faces.size(); k++) {
         currentEdge = faces[k].side;
-        for (m = 0; m < 3; m++) {
+        //zxt::- pass indexes in order of 6 vertices
+        for (m = 0; m < 6; m++) {
             polyIndices.append(currentEdge->target->index);
             currentEdge = currentEdge->next;
         }

@@ -28,6 +28,9 @@ private slots:
 
     void on_LoadOBJ_clicked();
 
+    void on_sBoxInnerTL_valueChanged(int value);
+    void on_sBoxOuterTL_valueChanged(int value);
+
 private:
     Ui::MainWindow *ui;
 };

@@ -42,6 +42,9 @@ void MainView::createShaderPrograms() {
     uniModelViewMatrix = glGetUniformLocation(mainShaderProg->programId(), "modelviewmatrix");
     uniProjectionMatrix = glGetUniformLocation(mainShaderProg->programId(), "projectionmatrix");
     uniNormalMatrix = glGetUniformLocation(mainShaderProg->programId(), "normalmatrix");
+
+    uniInnerTessLevel = glGetUniformLocation(mainShaderProg->programId(), "InnerTessLevel");
+    uniOuterTessLevel = glGetUniformLocation(mainShaderProg->programId(), "OuterTessLevel");
 }
 
 void MainView::createBuffers() {
@@ -94,6 +97,18 @@ void MainView::updateMeshBuffers(Mesh& currentMesh) {
     update();
 }
 
+void MainView::setInnerTessLevel(float level)
+{
+    InnerTessLevel = level;
+    updateMatrices();
+}
+
+void MainView::setOuterTessLevel(float level)
+{
+    OuterTessLevel = level;
+    updateMatrices();
+}
+
 void MainView::updateMatrices() {
 
     modelViewMatrix.setToIdentity();
@@ -104,7 +119,7 @@ void MainView::updateMatrices() {
     projectionMatrix.setToIdentity();
     projectionMatrix.perspective(FoV, dispRatio, 0.2, 4.0);
 
-    normalMatrix = modelViewMatrix.normalMatrix();
+    normalMatrix = modelViewMatrix.normalMatrix();    
 
     uniformUpdateRequired = true;
 
@@ -119,6 +134,9 @@ void MainView::updateUniforms() {
     glUniformMatrix4fv(uniProjectionMatrix, 1, false, projectionMatrix.data());
     glUniformMatrix3fv(uniNormalMatrix, 1, false, normalMatrix.data());
 
+    //zxt::- Set the parameters for LOD
+    glUniform1f(uniInnerTessLevel, InnerTessLevel);
+    glUniform1f(uniOuterTessLevel, OuterTessLevel);
 }
 
 // ---
@@ -153,9 +171,14 @@ void MainView::initializeGL() {
 
     // ---
 
+    //zxt::- Set the parameters for LOD
+    InnerTessLevel = 5.0f;
+    OuterTessLevel = 5.0f;
+
     updateMatrices();
 
-    glPatchParameteri( GL_PATCH_VERTICES, 6);
+    //zxt::- Set Patch Parameter to use 6 vertices
+    glPatchParameteri(GL_PATCH_VERTICES, 6);
 }
 
 void MainView::resizeGL(int newWidth, int newHeight) {
@@ -201,6 +224,7 @@ void MainView::renderMesh() {
         glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     }
 
+    //zxt::- Use GL_PATCHES when tessellation is on
     glDrawElements(GL_PATCHES, meshIBOSize, GL_UNSIGNED_INT, 0);
     //glDrawArrays(GL_PATCHES, 0, 6);
 

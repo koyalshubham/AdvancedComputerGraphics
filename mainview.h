@@ -32,6 +32,9 @@ public:
     void updateUniforms();
     void updateMeshBuffers(Mesh& currentMesh);
 
+    void setInnerTessLevel(float level);
+    void setOuterTessLevel(float level);
+
 protected:
     void initializeGL();
     void resizeGL(int newWidth, int newHeight);
@@ -47,10 +50,14 @@ private:
     QOpenGLDebugLogger* debugLogger;
 
     QMatrix4x4 modelViewMatrix, projectionMatrix;
-    QMatrix3x3 normalMatrix;
+    QMatrix3x3 normalMatrix;   
 
     // Uniforms
     GLint uniModelViewMatrix, uniProjectionMatrix, uniNormalMatrix;
+
+    //zxt::- Parameters for the LOD
+    GLfloat InnerTessLevel, OuterTessLevel;
+    GLint uniInnerTessLevel, uniOuterTessLevel;
 
     // ---
 
